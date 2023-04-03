@@ -1,13 +1,17 @@
 const userModel = require("../modal/userRegsiter");
 const bcrypt = require("bcrypt");
 const Jwt = require("jsonwebtoken");
-var request = require("request");
-var speakeasy = require("speakeasy")
+
+const {SET_ASYNC,GET_ASYNC}=require('./cacheStrorage')
 
 const Register = async (req, res) => {
   try {
     let data = req.body;
-    let { fullName, email, phone, password } = data;
+    let cachePhone = await GET_ASYNC("PhoneNumber")
+    cachePhone= JSON.parse(cachePhone)
+    // console.log(cachePhone)
+    let { fullName, email, password } = data;
+    data["phone"]=cachePhone
 
     if (Object.keys(data).length == 0)
       return res
@@ -21,17 +25,17 @@ const Register = async (req, res) => {
       return res
         .status(400)
         .send({ status: false, message: "Please Enter your Email" });
-    if (!phone)
-      return res
-        .status(400)
-        .send({ status: false, message: "Please Enter Your Phone Number" });
+    // if (!phone)
+    //   return res
+    //     .status(400)
+    //     .send({ status: false, message: "Please Enter Your Phone Number" });
     if (!password)
       return res
         .status(400)
         .send({ status: false, message: "Please Enter Password" });
 
     const isDuplicateEmail = await userModel.findOne({
-      $or: [{ email: email }, { phone: phone }],
+      $or: [{ email: email }, { phone: cachePhone }],
     });
     if (isDuplicateEmail) {
       if (isDuplicateEmail.email == email) {
@@ -42,12 +46,12 @@ const Register = async (req, res) => {
             message: `Provided EmailId: ${email} is already exist!`,
           });
       }
-      if (isDuplicateEmail.phone == phone) {
+      if (isDuplicateEmail.phone == cachePhone) {
         return res
           .status(400)
           .send({
             status: false,
-            message: `Provided Phone No.: ${phone} is already exist!`,
+            message: `Provided Phone No.: ${cachePhone} is already exist!`,
           });
       }
     }
@@ -74,10 +78,10 @@ const login = async function (req, res) {
         .status(400)
         .send({ status: false, msg: "Please enter all fileds" });
 
-    if (!phone)
+    if (!phone && !email)
       return res
         .status(400)
-        .send({ status: false, message: "Please Enter Your Phone Number" });
+        .send({ status: false, message: "Please Enter Your Phone Number and Email" });
     if (!password)
       return res
         .status(400)
@@ -113,26 +117,6 @@ const login = async function (req, res) {
   }
 };
 
-const otptest = async(req,res)=>{
-  let phone = req.body.phone
-  var secret = speakeasy.generateSecret({length: 20})
-  const token = speakeasy.totp({
-    secret: secret.base32,
-    encoding: 'base32'
-  });
-  //console.log(token)
-
-var options = { method: 'GET',
-url: `https://api.authkey.io/request?authkey=651ef6692f009509&mobile=${phone}&country_code=91&sid=7919&company=YellowSquash&otp=${token}`,
-
-}
-
-request(options, function (error, response, body) {
-if (error) throw new Error(error);
-res.status(200).send({status:true,message:body, secret: secret.base32, token })
-});
 
 
-}
-
-module.exports = { Register, login ,otptest};
+module.exports = { Register, login };
