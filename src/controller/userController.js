@@ -117,6 +117,26 @@ const login = async function (req, res) {
   }
 };
 
+const updateUserData = async function (req, res) {
+
+  try {
+
+      let data = req.body
+      let userId = req.params.userId
+      let { password } = data
+      let user = await userModel.findById(userId)
+      if (password) {
+          user.password = await bcrypt.hash(password, 10)
+      }
+      let updateUser = await userModel.findOneAndUpdate({ _id: userId }, { $set: user }, { new: true })
+      if (!updateUser) { return res.status(200).send({ status: true, message: "User not exist with this UserId." }) }
+      return res.status(200).send({ status: true, message: "User profile has been updated", data: updateUser })
+  } 
+  catch (error) {
+      return res.status(500).send({ status: false, message: error.message })
+  }
+}
 
 
-module.exports = { Register, login };
+
+module.exports = { Register, login ,updateUserData};
