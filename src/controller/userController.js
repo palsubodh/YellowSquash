@@ -7,12 +7,7 @@ const {SET_ASYNC,GET_ASYNC}=require('./cacheStrorage')
 const Register = async (req, res) => {
   try {
     let data = req.body;
-    let cachePhone = await GET_ASYNC("PhoneNumber")
-    cachePhone= JSON.parse(cachePhone)
-    // console.log(cachePhone)
-    let { fullName, email, password } = data;
-    data["phone"]=cachePhone
-
+    let { fullName, email, password,phone } = data;
     if (Object.keys(data).length == 0)
       return res
         .status(400)
@@ -25,20 +20,20 @@ const Register = async (req, res) => {
       return res
         .status(400)
         .send({ status: false, message: "Please Enter your Email" });
-    // if (!phone)
-    //   return res
-    //     .status(400)
-    //     .send({ status: false, message: "Please Enter Your Phone Number" });
+    if (!phone)
+      return res
+        .status(400)
+        .send({ status: false, message: "Please Enter Your Phone Number" });
     if (!password)
       return res
         .status(400)
         .send({ status: false, message: "Please Enter Password" });
 
-    const isDuplicateEmail = await userModel.findOne({
-      $or: [{ email: email }, { phone: cachePhone }],
+    const isDuplicate = await userModel.findOne({
+      $or: [{ email: email }, { phone: phone }],
     });
-    if (isDuplicateEmail) {
-      if (isDuplicateEmail.email == email) {
+    if (isDuplicate) {
+      if (isDuplicate.email == email) {
         return res
           .status(400)
           .send({
@@ -46,12 +41,12 @@ const Register = async (req, res) => {
             message: `Provided EmailId: ${email} is already exist!`,
           });
       }
-      if (isDuplicateEmail.phone == cachePhone) {
+      if (isDuplicate.phone == phone) {
         return res
           .status(400)
           .send({
             status: false,
-            message: `Provided Phone No.: ${cachePhone} is already exist!`,
+            message: `Provided Phone No.: ${phone} is already exist!`,
           });
       }
     }
@@ -90,12 +85,15 @@ const login = async function (req, res) {
     let userdata = await userModel.findOne({
       $or: [{ email: email }, { phone: phone }],
     });
+  
     if (!userdata)
       return res
         .status(401)
         .send({ status: false, message: "You need to register first" });
     //--------------- Decrypt the Password and Compare the password with User input ----------------//
     let checkPassword = await bcrypt.compare(password, userdata.password);
+
+    if(!checkPassword) return res.status(400).send({status:false,message:"Please enter valid password"})
 
     if (checkPassword) {
       let token = Jwt.sign(
@@ -108,8 +106,7 @@ const login = async function (req, res) {
         .send({
           status: true,
           message: "Token Created Sucessfully",
-          data: { token: token },
-          userdata: userdata,
+          data: { token: token }
         });
     }
   } catch (error) {
@@ -120,9 +117,9 @@ const login = async function (req, res) {
 const updateUserData = async function (req, res) {
 
   try {
-
+    
       let data = req.body
-      let userId = req.params.userId
+      let userId = req.body.userId
       let { password } = data
       let user = await userModel.findById(userId)
       if (password) {
@@ -130,7 +127,7 @@ const updateUserData = async function (req, res) {
       }
       let updateUser = await userModel.findOneAndUpdate({ _id: userId }, { $set: user }, { new: true })
       if (!updateUser) { return res.status(200).send({ status: true, message: "User not exist with this UserId." }) }
-      return res.status(200).send({ status: true, message: "User profile has been updated", data: updateUser })
+      return res.status(200).send({ status: true, message: "Credentials are updated" })
   } 
   catch (error) {
       return res.status(500).send({ status: false, message: error.message })
