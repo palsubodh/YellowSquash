@@ -58,6 +58,8 @@ const forgetOTP =  async (req,res)=>{
         secret: secret.base32,
         encoding: 'base32'
       });
+
+      
     var options = { method: 'GET',
     url: `https://api.authkey.io/request?authkey=651ef6692f009509&mobile=${phone}&country_code=91&sid=7919&company=YellowSquash&otp=${token}`,
     }
