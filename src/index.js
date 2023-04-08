@@ -4,10 +4,11 @@ const route= require('./routes/route')
 const app = express()
 const cors = require('cors')
 app.use(cors())
-
 require('dotenv').config({path:'./.env'})
-
+const multer = require('multer')
 app.use(express.json())
+app.use(multer().any())
+
 mongoose
   .connect(
     process.env.MONGO_URL
@@ -24,6 +25,7 @@ app.use("/",route)
 
 app.use(function (req, res) {
   var err = new Error("Not Found.")
+  console.log(req.params,req.url)
   err.status = 404
   return res.status(404).send({ status: "404", msg: "Path not Found." })
 })

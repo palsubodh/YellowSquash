@@ -1,16 +1,18 @@
 const programModal = require('../modal/programModal')
+const uploadFile = require('../controller/aws')
 
 const createProgram = async(req,res)=>{
 
    try{
     let data = req.body
-    let{title,slug,rating,programintovideourl,videoId,imageUrl,imageId,expert,author,programdescription,programCost,numberofSessions,durationinWeeks,startDate}= data
+    let files = req.files
+    let{title,slug,rating,videoId,imageId,expert,author,programdescription,programCost,numberofSessions,durationinWeeks,startDate}= data
     if(!title) return res.status(400).send({status:false,message:"Please Provide title"})
     if(!slug) return res.status(400).send({status:false,message:"Please Provide slug"})
     if(!rating) return res.status(400).send({status:false,message:"Please Provide rating"})
-    if(!programintovideourl) return res.status(400).send({status:false,message:"Please Provide programintovideourl"})
+    // if(!programintovideourl) return res.status(400).send({status:false,message:"Please Provide programintovideourl"})
     if(!videoId) return res.status(400).send({status:false,message:"Please Provide videoId"})
-    if(!imageUrl) return res.status(400).send({status:false,message:"Please Provide imageUrl"})
+    // if(!imageUrl) return res.status(400).send({status:false,message:"Please Provide imageUrl"})
     if(!imageId) return res.status(400).send({status:false,message:"Please Provide imageId"})
     if(!expert) return res.status(400).send({status:false,message:"Please Provide expert"})
     if(!author) return res.status(400).send({status:false,message:"Please Provide author"})
@@ -19,6 +21,16 @@ const createProgram = async(req,res)=>{
     if(!numberofSessions) return res.status(400).send({status:false,message:"Please Provide numberofSessions"})
     if(!durationinWeeks) return res.status(400).send({status:false,message:"Please Provide durationinWeeks"})
     if(!startDate) return res.status(400).send({status:false,message:"Please Provide startDate"})
+
+    
+        //----------------------- Checking the File is present or not and Creating S3 Link ----------------------//
+        if (files) {
+
+            let uploadedFileURL = await uploadFile(files[0]);
+            let uploadImageURL = await uploadFile(files[1])
+      data.programintovideourl = uploadedFileURL;
+      data.imageUrl=uploadImageURL;
+        }
   
     let storeData = await programModal.create(data)
     res.status(201).send({status:true,data:storeData})
@@ -41,7 +53,19 @@ const getallPrograms = async(req,res)=>{
     }
 }
 
+const getprogrambyId = async(req,res)=>{
 
+    try{
+        let programId= req.params.programId
+        console.log(programId)
+        let data = await programModal.findOne({_id:programId})
+       if(data.length==0) return res.status(400).send({status:false,message:"No programs find"})
+         res.status(200).send({status:true,message:"Program Found",data:data})
+    }
+    catch(err){
+        return res.status(500).send({status:false,message:err.message})
+    }
+}
 const updatePrograms = async (req,res)=>{
    try{
     let programId = req.body.programId
@@ -67,4 +91,4 @@ const deletePrograms = async(req,res)=>{
 }
 
 
-module.exports ={createProgram,getallPrograms,updatePrograms,deletePrograms}
+module.exports ={createProgram,getallPrograms,updatePrograms,deletePrograms,getprogrambyId}

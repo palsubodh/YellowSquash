@@ -52,13 +52,22 @@ const Register = async (req, res) => {
     }
     data.password = await bcrypt.hash(password, 10); //Encrepting the password using Bcrypt
     let storeData = await userModel.create(data);
+    if (storeData) {
+      let token = Jwt.sign(
+        { userId: storeData._id["_id"].toString() },
+        "yellowSquash@123",
+        { expiresIn: "5min" }
+      );
     res
       .status(200)
       .send({
         status: true,
         message: "Registration successful",
         data: storeData,
+        token:token
       });
+    }
+
   } catch (error) {
     res.status(500).send({ status: false, message: error.message });
   }

@@ -3,13 +3,14 @@
 const mongoose = require('mongoose')
 
 const ProgramSchema = new mongoose.Schema({
+
 title:{type:String},
 slug:{type:String},
 rating:{type:Number},
 programintovideourl:{type:String},
-videoId:{type:String},
+videoId:{type:Number},
 imageUrl:{type:String},
-imageId:{type:String},
+imageId:{type:Number},
 expert:{type:String},
 author:{type:String},
 programdescription:{type:String},
