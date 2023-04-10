@@ -17,7 +17,6 @@ programdescription:{type:String},
 programCost:{type:Number},
 numberofSessions:{type:Number},
 durationinWeeks:{type:Number},
-category:[],
 startDate:{type:Date},
 status:{type:String,default:"inactive"}
 

@@ -53,12 +53,12 @@ const getallPrograms = async(req,res)=>{
         key.pop(key[0])
         key.pop(key[0])
         key.shift()
-        for(let i=0;i<data.length;i++){
-            let newdata = data[i]
-         newdata.category=key
-        }
+        // for(let i=0;i<data.length;i++){
+        //     let newdata = data[i]
+        //  newdata.category=key
+        // }
        if(data.length==0) return res.status(400).send({status:false,message:"No programs find"})
-         res.status(200).send({status:true,message:"All Programs data",data:data})
+         res.status(200).send({status:true,message:"All Programs data",data:data,category:key})
     }
     catch(err){
         return res.status(500).send({status:false,message:err.message})
