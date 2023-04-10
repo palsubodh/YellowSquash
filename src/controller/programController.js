@@ -69,9 +69,8 @@ const getprogrambyId = async(req,res)=>{
 
     try{
         let programId= req.params.programId
-        console.log(programId)
         let data = await programModal.findOne({_id:programId})
-       if(data.length==0) return res.status(400).send({status:false,message:"No programs find"})
+       if(data==null) return res.status(400).send({status:false,message:"No programs find"})
          res.status(200).send({status:true,message:"Program Found",data:data})
     }
     catch(err){

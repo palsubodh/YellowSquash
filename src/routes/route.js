@@ -29,7 +29,7 @@ router.post("/createcategory",createCategory)
 router.put("/updateCategory",updateCategory)
 router.delete("/deleteCategory/:categoryId/:category",deleteCategory)
 router.get("/getAllcategory",getAllcategory)
-router.get("/getSingleCategory/:category",getSingleCategory)
+router.get("/getSingleCategory",getSingleCategory)
 router.get("/getListCategory",getListCategory)
 
 module.exports = router

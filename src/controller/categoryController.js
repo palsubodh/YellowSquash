@@ -62,7 +62,8 @@ const getAllcategory= async(req,res)=>{
 const getSingleCategory= async(req,res)=>{
    try{
      
-    let cat = req.params.category
+    let cat = req.query
+    cat=Object.keys(cat)
     let findData = await categoryModel.find()
     let arr=[]
     let data=findData[0][cat]
