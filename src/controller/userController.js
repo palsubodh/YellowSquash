@@ -108,7 +108,7 @@ const login = async function (req, res) {
       let token = Jwt.sign(
         { userId: userdata["_id"].toString() },
         "yellowSquash@123",
-        { expiresIn: "5min" }
+        { expiresIn: "24h" }
       );
       res
         .status(200)
@@ -134,7 +134,7 @@ const updateUserData = async function (req, res) {
       if (password) {
           user.password = await bcrypt.hash(password, 10)
       }
-      let updateUser = await userModel.findOneAndUpdate({ _id: userId }, { $set: user }, { new: true })
+      let updateUser = await userModel.findOneAndUpdate({ _id: userId }, { $set: user,updatedAt: new Date(Date.now()) }, { new: true })
       if (!updateUser) { return res.status(200).send({ status: true, message: "User not exist with this UserId." }) }
       return res.status(200).send({ status: true, message: "Credentials are updated" })
   } 

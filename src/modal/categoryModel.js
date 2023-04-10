@@ -19,6 +19,7 @@ const categorySchema = new mongoose.Schema({
     infertility:[String],
     heartHealth:[String],
     ADHD:[String],
+   
 }
 ,{timestamps:true})
 

@@ -22,7 +22,7 @@ const updateCategory = async(req,res)=>{
     try{
         let data = req.body
         let Id= data.id
-        let Data = await categoryModel.findOneAndUpdate({_id:Id},{$set:data},{new:true})
+        let Data = await categoryModel.findOneAndUpdate({_id:Id},{$set:data,updateAt:new Date(Date.now())},{new:true})
         if(!Data) return res.status(StatusCodes.BAD_REQUEST).json({status:false,message:"No category found"})
         res.status(StatusCodes.CREATED).json({status:true,data:Data})
     }
@@ -50,7 +50,7 @@ const deleteCategory = async(req,res)=>{
 
 const getAllcategory= async(req,res)=>{
     try{
-        let data = await categoryModel.find()
+        let data = await programModal.find()
         res.status(StatusCodes.OK).json({status:true,data:data})
     }
     catch(err){

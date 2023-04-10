@@ -1,5 +1,6 @@
 const programModal = require('../modal/programModal')
 const uploadFile = require('../controller/aws')
+const categoryModel = require('../modal/categoryModel')
 
 const createProgram = async(req,res)=>{
 
@@ -45,6 +46,17 @@ const getallPrograms = async(req,res)=>{
 
     try{
         let data = await programModal.find()
+        let categoryList = await categoryModel.find()
+        let keys= categoryList[0]
+        let key=Object.keys(keys._doc)
+        key.pop(key[0])
+        key.pop(key[0])
+        key.pop(key[0])
+        key.shift()
+        for(let i=0;i<data.length;i++){
+            let newdata = data[i]
+         newdata.category=key
+        }
        if(data.length==0) return res.status(400).send({status:false,message:"No programs find"})
          res.status(200).send({status:true,message:"All Programs data",data:data})
     }
@@ -70,6 +82,7 @@ const updatePrograms = async (req,res)=>{
    try{
     let programId = req.body.programId
     let data = await programModal.findOneAndUpdate({_id:programId},req.body,{new:true})
+    data.updatedAt=new Date(Date.now())
     if(!data) return res.status(400).send({status:false,message:"No programs found"})
    return res.status(200).send({status:true,message:"Program updated successfully",data:data})
    }
