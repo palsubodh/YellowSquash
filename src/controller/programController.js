@@ -7,7 +7,11 @@ const createProgram = async(req,res)=>{
    try{
     let data = req.body
     let files = req.files
-    let{title,slug,rating,videoId,imageId,expert,author,programdescription,programCost,numberofSessions,durationinWeeks,startDate}= data
+    let{title,slug,rating,videoId,imageId,expert,expertDesignation,expertImage,teamImage,author,programdescription,programCost,numberofSessions,durationinWeeks,startDate,programCategory,enrolledUser,overview,aboutTheExpert,aboutTeam,howItWorks,structure,FAQ}= data
+    /// this is explicit handle for nested object in mongodb
+   let obj={}
+     obj.overview=JSON.parse(overview)
+     obj.aboutTheExpert=JSON.parse(aboutTheExpert)
     if(!title) return res.status(400).send({status:false,message:"Please Provide title"})
     if(!slug) return res.status(400).send({status:false,message:"Please Provide slug"})
     if(!rating) return res.status(400).send({status:false,message:"Please Provide rating"})
@@ -16,6 +20,8 @@ const createProgram = async(req,res)=>{
     // if(!imageUrl) return res.status(400).send({status:false,message:"Please Provide imageUrl"})
     if(!imageId) return res.status(400).send({status:false,message:"Please Provide imageId"})
     if(!expert) return res.status(400).send({status:false,message:"Please Provide expert"})
+    if(!expertDesignation) return res.status(400).send({status:false,message:"Please Provide expertDesignation"})
+
     if(!author) return res.status(400).send({status:false,message:"Please Provide author"})
     if(!programdescription) return res.status(400).send({status:false,message:"Please Provide programdescription"})
     if(!programCost) return res.status(400).send({status:false,message:"Please Provide programCost"})
@@ -23,16 +29,29 @@ const createProgram = async(req,res)=>{
     if(!durationinWeeks) return res.status(400).send({status:false,message:"Please Provide durationinWeeks"})
     if(!startDate) return res.status(400).send({status:false,message:"Please Provide startDate"})
 
-    
+    if(!programCategory) return res.status(400).send({status:false,message:"Please Provide programCategory"})
+    if(!enrolledUser) return res.status(400).send({status:false,message:"Please Provide enrolledUser"})
+    if(!overview) return res.status(400).send({status:false,message:"Please Provide overview"})
+    if(!aboutTheExpert) return res.status(400).send({status:false,message:"Please Provide aboutTheExpert"})
+    if(!aboutTeam) return res.status(400).send({status:false,message:"Please Provide aboutTeam"})
+    if(!howItWorks) return res.status(400).send({status:false,message:"Please Provide howItWorks"})
+    if(!structure) return res.status(400).send({status:false,message:"Please Provide structure"})
+    if(!FAQ) return res.status(400).send({status:false,message:"Please Provide FQA"})
         //----------------------- Checking the File is present or not and Creating S3 Link ----------------------//
         if (files) {
 
             let uploadedFileURL = await uploadFile(files[0]);
             let uploadImageURL = await uploadFile(files[1])
+            let expertURL =await uploadFile(files[2])
+            let teamURL = await uploadFile(files[3])
       data.programintovideourl = uploadedFileURL;
       data.imageUrl=uploadImageURL;
+      data.expertImage=expertURL;
+      data.teamImage=teamURL;
         }
-  
+ 
+        data.overview = obj.overview
+        data.aboutTheExpert=obj.aboutTheExpert
     let storeData = await programModal.create(data)
     res.status(201).send({status:true,data:storeData})
    }

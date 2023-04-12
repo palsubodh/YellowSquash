@@ -80,7 +80,6 @@ const getSingleCategory= async(req,res)=>{
 
 const getListCategory= async(req,res)=>{
     try{
-      
      let cat = req.query
      let findData = await categoryModel.find()
      let data = Object.keys(cat)
