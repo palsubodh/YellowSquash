@@ -67,14 +67,16 @@ const getSingleCategory= async(req,res)=>{
     let findData = await categoryModel.find()
     let arr=[]
     let data=findData[0][cat]
+  
     for(let i=0;i<data.length;i++){
         let find = await programModal.findById({_id:data[i]})
         arr.push(find)
      }
+     if(arr.length==0) return res.status(StatusCodes.NOT_FOUND).json({status:false,message:"Data not found"})
     res.status(StatusCodes.OK).json({status:true,data:arr})
    }
    catch(err){
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({status:false,message:err.message})
+    //return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({status:false,message:err.message})
    }
 }
 
@@ -105,6 +107,8 @@ const getListCategory= async(req,res)=>{
         let find = await programModal.findById({_id:arr[i]})
         arr1.push(find)
      }
+    
+     if(arr1.length==0) return res.status(StatusCodes.NOT_FOUND).json({status:false,message:"Data not found"})
      res.status(StatusCodes.OK).json({status:true,data:arr1})
     }
     catch(err){

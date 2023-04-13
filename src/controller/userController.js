@@ -120,8 +120,8 @@ const login = async function (req, res) {
         .send({
           status: true,
           message: "Token Created Sucessfully",
-          data: { token: token },
-          userdata:obj
+          data:obj,
+          token: token
         });
     }
   } catch (error) {
