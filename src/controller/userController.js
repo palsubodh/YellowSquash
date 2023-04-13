@@ -94,7 +94,12 @@ const login = async function (req, res) {
     let userdata = await userModel.findOne({
       $or: [{ email: email }, { phone: phone }],
     });
-  
+  let obj={}
+  obj.fullName=userdata.fullName
+  obj.email=userdata.email
+  obj.phone=userdata.phone
+  obj._id=userdata._id
+  obj.role=userdata.role
     if (!userdata)
       return res
         .status(401)
@@ -115,7 +120,8 @@ const login = async function (req, res) {
         .send({
           status: true,
           message: "Token Created Sucessfully",
-          data: { token: token }
+          data: { token: token },
+          userdata:obj
         });
     }
   } catch (error) {
