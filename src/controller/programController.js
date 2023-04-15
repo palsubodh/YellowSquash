@@ -7,11 +7,13 @@ const createProgram = async(req,res)=>{
    try{
     let data = req.body
     let files = req.files
-    let{title,slug,rating,videoId,imageId,expert,expertDesignation,expertImage,teamImage,author,programdescription,programCost,numberofSessions,durationinWeeks,startDate,programCategory,enrolledUser,overview,aboutTheExpert,aboutTeam,howItWorks,structure,FAQ}= data
+  //  console.log(files)
+    let{title,slug,rating,videoId,imageId,expert,expertDesignation,expertImage,teamImage,author,programdescription,programCost,numberofSessions,plans,startDate,programCategory,enrolledUser,overview,aboutTheExpert,aboutTeam,howItWorks,structure,FAQ}= data
     /// this is explicit handle for nested object in mongodb
    let obj={}
      obj.overview=JSON.parse(overview)
      obj.aboutTheExpert=JSON.parse(aboutTheExpert)
+     obj.plans=JSON.parse(plans)
     if(!title) return res.status(400).send({status:false,message:"Please Provide title"})
     if(!slug) return res.status(400).send({status:false,message:"Please Provide slug"})
     if(!rating) return res.status(400).send({status:false,message:"Please Provide rating"})
@@ -26,7 +28,7 @@ const createProgram = async(req,res)=>{
     if(!programdescription) return res.status(400).send({status:false,message:"Please Provide programdescription"})
     if(!programCost) return res.status(400).send({status:false,message:"Please Provide programCost"})
     if(!numberofSessions) return res.status(400).send({status:false,message:"Please Provide numberofSessions"})
-    if(!durationinWeeks) return res.status(400).send({status:false,message:"Please Provide durationinWeeks"})
+    if(!plans) return res.status(400).send({status:false,message:"Please Provide durationinWeeks"})
     if(!startDate) return res.status(400).send({status:false,message:"Please Provide startDate"})
 
     if(!programCategory) return res.status(400).send({status:false,message:"Please Provide programCategory"})
@@ -52,6 +54,7 @@ const createProgram = async(req,res)=>{
  
         data.overview = obj.overview
         data.aboutTheExpert=obj.aboutTheExpert
+        data.plans = obj.plans
     let storeData = await programModal.create(data)
  
     res.status(201).send({status:true,data:storeData})

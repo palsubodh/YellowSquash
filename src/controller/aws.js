@@ -1,20 +1,22 @@
+require('dotenv').config({path:'./.env'})
 const AWS = require('aws-sdk')
 require('aws-sdk/lib/maintenance_mode_message').suppress = true;
+const fs = require('fs')
 
 AWS.config.update({
-    accessKeyId: "AKIAY3L35MCRZNIRGT6N",
-    secretAccessKey: "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",
-    region: "ap-south-1"
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_KEY,
+    region:process.env.AWS_REGION
 })
 
 let uploadFile = async (file) => {
     return new Promise(function (resolve, reject) {
         let s3 = new AWS.S3({ apiVersion: '2006-03-01' });
-
+        // let fileStream = fs.createReadStream(file.buffer)
+        // console.log(fileStream)
         var uploadParams = {
-            ACL: "public-read",
-            Bucket: "classroom-training-bucket",
-            Key: "group22Database/" + file.originalname,
+            Bucket: "ysdbresources",
+            Key:   file.originalname,
             Body: file.buffer
         }
 

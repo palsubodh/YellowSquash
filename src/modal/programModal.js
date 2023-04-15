@@ -19,7 +19,24 @@ programdescription:{type:String},
 programCost:{type:Number},
 discount:{type:Number},
 numberofSessions:{type:Number},
-durationinWeeks:{type:Number},
+plans:{
+    week3 :{
+        discount:{type:Number},
+        price:{type:Number},
+    },
+    week6 :{
+        discount:{type:Number},
+        price:{type:Number},
+    },
+    week9 :{
+        discount:{type:Number},
+        price:{type:Number},
+    },
+    week12 :{
+        discount:{type:Number},
+        price:{type:Number},
+    }
+},
 startDate:{type:Date},
 programCategory:{type:String},
 enrolledUser:{type:Number},

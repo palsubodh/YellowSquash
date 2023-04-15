@@ -94,6 +94,8 @@ const login = async function (req, res) {
     let userdata = await userModel.findOne({
       $or: [{ email: email }, { phone: phone }],
     });
+
+    if(userdata==null) return res.status(404).send({status:false,message:"please enter valid credential"})
   let obj={}
   obj.fullName=userdata.fullName
   obj.email=userdata.email

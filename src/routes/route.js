@@ -4,6 +4,8 @@ const {Register,login,updateUserData} = require('../controller/userController')
 const {phoneNumberStore, verifyOTP,forgetOTP,forgetverifyOTP} = require('../controller/cacheStrorage')
 const {createProgram,getallPrograms,updatePrograms,deletePrograms,getprogrambyId}= require('../controller/programController')
 const {createCategory,updateCategory,deleteCategory,getAllcategory,getSingleCategory,getListCategory}= require('../controller/categoryController')
+
+const {CreateDiscount,getCoupon,updateCoupon,deleteCoupon} = require('../controller/discountController')
 /*************************Auths API ******************************************/
 
 router.post("/otp",phoneNumberStore)
@@ -31,6 +33,17 @@ router.delete("/deleteCategory/:categoryId/:category",deleteCategory)
 router.get("/getAllcategory",getAllcategory)
 router.get("/getSingleCategory",getSingleCategory)
 router.get("/getListCategory",getListCategory)
+
+/****************Discount APIs**************/
+
+router.post("/creatediscount",CreateDiscount)
+router.get("/getCoupon/:couponCode",getCoupon)
+router.put("/updateCoupon",updateCoupon)
+router.delete("/deleteCoupon/:couponId",deleteCoupon)
+
+
+
+
 
 module.exports = router
 
