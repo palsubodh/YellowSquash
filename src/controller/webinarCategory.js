@@ -1,14 +1,14 @@
-const categoryModel = require('../modal/categoryModel')
+const webinarcategoryModel = require('../modal/webinarCategoryModal')
 const StatusCodes = require('http-status-codes')
-const programModal = require('../modal/programModal')
+const webinarModal = require('../modal/webinarModal')
 
 
-const createCategory = async(req,res)=>{
+const wcreateCategory = async(req,res)=>{
 
     try{
         let data = req.body
 if(Object.keys(data).length==0) return res.status(StatusCodes.BAD_REQUEST).json({status:false,message:"Please enter fileds "})
-    let storedata = await categoryModel.create(data)
+    let storedata = await webinarcategoryModel.create(data)
     res.status(StatusCodes.CREATED).json({status:true,data:storedata})
 
     }
@@ -18,11 +18,11 @@ if(Object.keys(data).length==0) return res.status(StatusCodes.BAD_REQUEST).json(
 
 }
 
-const updateCategory = async(req,res)=>{
+const wupdateCategory = async(req,res)=>{
     try{
         let data = req.body
         let Id= data.id
-        let Data = await categoryModel.findOneAndUpdate({_id:Id},{$set:data,updateAt:new Date(Date.now())},{new:true})
+        let Data = await webinarcategoryModel.findOneAndUpdate({_id:Id},{$set:data,updateAt:new Date(Date.now())},{new:true})
         if(!Data) return res.status(StatusCodes.BAD_REQUEST).json({status:false,message:"No category found"})
         res.status(StatusCodes.CREATED).json({status:true,data:Data})
     }
@@ -31,15 +31,15 @@ const updateCategory = async(req,res)=>{
     }
 }
 
-const deleteCategory = async(req,res)=>{
+const wdeleteCategory = async(req,res)=>{
     try{
         let value= req.params.categoryId
         let cat = req.params.category
       //  console.log(value,cat)
-        let findvalue = await categoryModel.findById({_id:value})
+        let findvalue = await webinarcategoryModel.findById({_id:value})
         if(!findvalue) return res.status(StatusCodes.BAD_REQUEST).json({status:false,message:"No category found"})
        findvalue[cat]=[]
-       let findvaluebycat = await categoryModel.findByIdAndUpdate({_id:value},findvalue,{new:true})
+       let findvaluebycat = await webinarcategoryModel.findByIdAndUpdate({_id:value},findvalue,{new:true})
         res.status(StatusCodes.OK).send({status:true})
     
     }
@@ -48,9 +48,9 @@ const deleteCategory = async(req,res)=>{
     }
 }
 
-const getAllcategory= async(req,res)=>{
+const wgetAllcategory= async(req,res)=>{
     try{
-        let data = await programModal.find()
+        let data = await webinarModal.find()
         res.status(StatusCodes.OK).json({status:true,data:data})
     }
     catch(err){
@@ -59,18 +59,18 @@ const getAllcategory= async(req,res)=>{
 }
 
 
-const getSingleCategory= async(req,res)=>{
+const wgetSingleCategory= async(req,res)=>{
    try{
      
     let cat = req.query
     cat=Object.keys(cat)
-    let findData = await categoryModel.find()
+    let findData = await webinarcategoryModel.find()
     let arr=[]
     let data=findData[0][cat]
    
   
     for(let i=0;i<data.length;i++){
-        let find = await programModal.findById({_id:data[i]})
+        let find = await webinarModal.findById({_id:data[i]})
         arr.push(find)
      }
     res.status(StatusCodes.OK).json({status:true,data:arr})
@@ -80,10 +80,10 @@ const getSingleCategory= async(req,res)=>{
    }
 }
 
-const getListCategory= async(req,res)=>{
+const wgetListCategory= async(req,res)=>{
     try{
      let cat = req.query
-     let findData = await categoryModel.find()
+     let findData = await webinarcategoryModel.find()
      let data = Object.keys(cat)
      let arr=[]
      let arr1=[]
@@ -104,7 +104,7 @@ const getListCategory= async(req,res)=>{
       }
      }
      for(let i=0;i<arr.length;i++){
-        let find = await programModal.findById({_id:arr[i]})
+        let find = await webinarModal.findById({_id:arr[i]})
         arr1.push(find)
      }
      res.status(StatusCodes.OK).json({status:true,data:arr1})
@@ -114,4 +114,4 @@ const getListCategory= async(req,res)=>{
     }
  }
 
-module.exports ={createCategory,updateCategory,deleteCategory,getAllcategory,getSingleCategory,getListCategory}
+module.exports ={wcreateCategory,wupdateCategory,wdeleteCategory,wgetAllcategory,wgetSingleCategory,wgetListCategory}
