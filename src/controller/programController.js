@@ -144,7 +144,17 @@ const upcomingProgram = async(req,res)=>{
         key.pop(key[0])
         key.pop(key[0])
         key.shift()
-      
+        for(let i=0;i<data.length;i++){
+            let x=  data[i].plans.plansdetails
+           
+            for(let i=0;i<x.length;i++){
+             let discount=  x[i].discount
+              let price = x[i].price
+              let total = price*discount/100
+              x[i].discountedPrice=price-total
+            //   console.log(x[i])
+            }
+           }
        if(data.length==0) return res.status(400).send({status:false,message:"No programs find"})
        const currentDate = new Date();
        // Filter programs that have a date greater than or equal to the current date
