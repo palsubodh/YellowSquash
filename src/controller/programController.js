@@ -26,7 +26,7 @@ const createProgram = async(req,res)=>{
 
     if(!author) return res.status(400).send({status:false,message:"Please Provide author"})
     if(!programdescription) return res.status(400).send({status:false,message:"Please Provide programdescription"})
-    if(!programCost) return res.status(400).send({status:false,message:"Please Provide programCost"})
+    //if(!programCost) return res.status(400).send({status:false,message:"Please Provide programCost"})
     if(!numberofSessions) return res.status(400).send({status:false,message:"Please Provide numberofSessions"})
     if(!plans) return res.status(400).send({status:false,message:"Please Provide durationinWeeks"})
     if(!startDate) return res.status(400).send({status:false,message:"Please Provide startDate"})
@@ -62,7 +62,7 @@ const createProgram = async(req,res)=>{
    }
    catch(err){
     return res.status(500).send({status:false,message:err.message})
-   }
+}
 }
 
 
@@ -77,6 +77,18 @@ const getallPrograms = async(req,res)=>{
         key.pop(key[0])
         key.pop(key[0])
         key.shift()
+
+        for(let i=0;i<data.length;i++){
+            let x=  data[i].plans.plansdetails
+           
+            for(let i=0;i<x.length;i++){
+             let discount=  x[i].discount
+              let price = x[i].price
+              let total = price*discount/100
+              x[i].discountedPrice=price-total
+            //   console.log(x[i])
+            }
+           }
        if(data.length==0) return res.status(400).send({status:false,message:"No programs find"})
          res.status(200).send({status:true,message:"All Programs data",data:data,category:key})
     }

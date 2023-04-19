@@ -16,27 +16,8 @@ expertDesignation:{type:String},
 expertImage:{type:String},
 author:{type:String},
 programdescription:{type:String},
-programCost:{type:Number},
-discount:{type:Number},
 numberofSessions:{type:Number},
-plans:{
-    week3 :{
-        discount:{type:Number},
-        price:{type:Number},
-    },
-    week6 :{
-        discount:{type:Number},
-        price:{type:Number},
-    },
-    week9 :{
-        discount:{type:Number},
-        price:{type:Number},
-    },
-    week12 :{
-        discount:{type:Number},
-        price:{type:Number},
-    }
-},
+plans:{type: mongoose.Schema.Types.Mixed},
 startDate:{type:String},
 programCategory:{type:String},
 enrolledUser:{type:Number},
