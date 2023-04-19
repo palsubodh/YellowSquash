@@ -15,6 +15,7 @@ let uploadFile = async (file) => {
         // let fileStream = fs.createReadStream(file.buffer)
         // console.log(fileStream)
         var uploadParams = {
+            // ACL: "public-read",
             Bucket: "ysdbresources",
             Key:   file.originalname,
             Body: file.buffer
@@ -29,6 +30,24 @@ let uploadFile = async (file) => {
         })
     })
 }
+
+// const AWS = require('aws-sdk');
+// const s3 = new AWS.S3();
+
+exports.downloadImageFromBucket = (Bucket,  Key, res) => {
+  const params = {
+    Bucket: Bucket,
+    Key:  Key
+  };
+  const s3Stream = s3.getObject(params).createReadStream();
+  s3Stream.on('error', err => {
+    console.log(err);
+    res.status(500).send('Error retrieving image from S3 bucket');
+  });
+  res.set('Content-Type', 'image/jpeg');
+  s3Stream.pipe(res);
+};
+
 
 
 module.exports = uploadFile 

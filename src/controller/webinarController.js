@@ -110,5 +110,26 @@ const  getallWebinarById = async(req,res)=>{
 }
 
 
+const  upcomingWebinar = async(req,res)=>{
+    
+    try{
+     let data = await webinarModal.find()
+     let categoryList = await categoryModel.find()
+     let keys= categoryList[0]
+         let key=Object.keys(keys._doc)
+         key.pop(key[0])
+         key.pop(key[0])
+         key.pop(key[0])
+         key.shift()
+     if(data.length==0) return res.status(StatusCodes.NOT_FOUND).send({status:false,message:"Webinar not found"})
+     const currentDate = new Date();
+       // Filter programs that have a date greater than or equal to the current date
+       const upcoming = data.filter(program => new Date(program.date) >= currentDate);
+     res.status(StatusCodes.OK).send({status:true,message:"All webinar data",data:upcoming,category:key})
+    }
+    catch(err){
+     return res.status(500).send({status:false,message:err.message})
+    }
+ }
 
-module.exports={createWebinar,getallWebinar,getallWebinarById,updateWebinar,deleteWebinar}
+module.exports={createWebinar,getallWebinar,getallWebinarById,updateWebinar,deleteWebinar,upcomingWebinar}

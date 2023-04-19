@@ -5,13 +5,15 @@ const router = express.Router()
 
 const {Register,login,updateUserData} = require('../controller/userController')
 const {phoneNumberStore, verifyOTP,forgetOTP,forgetverifyOTP} = require('../controller/cacheStrorage')
-const {createProgram,getallPrograms,updatePrograms,deletePrograms,getprogrambyId}= require('../controller/programController')
+const {createProgram,getallPrograms,updatePrograms,deletePrograms,getprogrambyId,upcomingProgram}= require('../controller/programController')
 const {createCategory,updateCategory,deleteCategory,getAllcategory,getSingleCategory,getListCategory}= require('../controller/categoryController')
 
 const {CreateDiscount,getCoupon,updateCoupon,deleteCoupon} = require('../controller/discountController')
-const {createWebinar,getallWebinar,getallWebinarById,updateWebinar,deleteWebinar}= require('../controller/webinarController')
+const {createWebinar,getallWebinar,getallWebinarById,updateWebinar,deleteWebinar,upcomingWebinar}= require('../controller/webinarController')
 
 const {wcreateCategory,wupdateCategory,wdeleteCategory,wgetAllcategory,wgetSingleCategory,wgetListCategory}= require('../controller/webinarCategory')
+
+const {downloadImageFromBucket}= require('../controller/aws')
 
 
 
@@ -33,6 +35,7 @@ router.get("/getprograms",getallPrograms)
 router.get("/getprogrambyId/:programId",getprogrambyId)
 router.put("/updatePrograms",updatePrograms)
 router.delete("/deletePrograms/:programId",deletePrograms)
+router.get("/upcoming",upcomingProgram)
 
 /****************Category APIs**************/
 
@@ -57,6 +60,7 @@ router.get("/getwebinar",getallWebinar)
 router.get("/getwebinar/:webinarId",getallWebinarById)
 router.put("/getwebinar",updateWebinar)
 router.delete("/getwebinar/:webinarId",deleteWebinar)
+router.get("/upcomingwebinar",upcomingWebinar)
 
 
 /********WEBINAR CATEGORY API*********************************/
@@ -67,6 +71,8 @@ router.delete("/wdeleteCategory/:categoryId/:category",wdeleteCategory)
 router.get("/wgetAllcategory",wgetAllcategory)
 router.get("/wgetSingleCategory",wgetSingleCategory)
 router.get("/wgetListCategory",wgetListCategory)
+
+//router.get("/getobject",downloadImageFromBucket)
 
 
 

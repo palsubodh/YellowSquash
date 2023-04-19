@@ -9,7 +9,7 @@ const createProgram = async(req,res)=>{
     let files = req.files
   //  console.log(files)
     let{title,slug,rating,videoId,imageId,expert,expertDesignation,expertImage,teamImage,author,programdescription,programCost,numberofSessions,plans,startDate,programCategory,enrolledUser,overview,aboutTheExpert,aboutTeam,howItWorks,structure,FAQ}= data
-    /// this is explicit handle for nested object in mongodb
+    startDate = JSON.stringify(startDate)
    let obj={}
      obj.overview=JSON.parse(overview)
      obj.aboutTheExpert=JSON.parse(aboutTheExpert)
@@ -30,6 +30,7 @@ const createProgram = async(req,res)=>{
     if(!numberofSessions) return res.status(400).send({status:false,message:"Please Provide numberofSessions"})
     if(!plans) return res.status(400).send({status:false,message:"Please Provide durationinWeeks"})
     if(!startDate) return res.status(400).send({status:false,message:"Please Provide startDate"})
+    // startDate= JSON.parse(data.startDate)
 
     if(!programCategory) return res.status(400).send({status:false,message:"Please Provide programCategory"})
     if(!enrolledUser) return res.status(400).send({status:false,message:"Please Provide enrolledUser"})
@@ -121,5 +122,28 @@ const deletePrograms = async(req,res)=>{
        }
 }
 
+const upcomingProgram = async(req,res)=>{
+    try{
+        let data = await programModal.find()
+        let categoryList = await categoryModel.find()
+        let keys= categoryList[0]
+        let key=Object.keys(keys._doc)
+        key.pop(key[0])
+        key.pop(key[0])
+        key.pop(key[0])
+        key.shift()
+      
+       if(data.length==0) return res.status(400).send({status:false,message:"No programs find"})
+       const currentDate = new Date();
+       // Filter programs that have a date greater than or equal to the current date
+       const upcoming = data.filter(program => new Date(program.startDate) >= currentDate);
+       
+         res.status(200).send({status:true,message:"All Programs data",data:upcoming,category:key})
+    }
+    catch(err){
+        return res.status(500).send({status:false,message:err.message})
+    }
 
-module.exports ={createProgram,getallPrograms,updatePrograms,deletePrograms,getprogrambyId}
+}
+
+module.exports ={createProgram,getallPrograms,updatePrograms,deletePrograms,getprogrambyId,upcomingProgram}

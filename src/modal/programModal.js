@@ -37,7 +37,7 @@ plans:{
         price:{type:Number},
     }
 },
-startDate:{type:Date},
+startDate:{type:String},
 programCategory:{type:String},
 enrolledUser:{type:Number},
 status:{type:String,default:"inactive"},
