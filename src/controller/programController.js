@@ -40,6 +40,7 @@ const createProgram = async(req,res)=>{
     if(!howItWorks) return res.status(400).send({status:false,message:"Please Provide howItWorks"})
     if(!structure) return res.status(400).send({status:false,message:"Please Provide structure"})
     if(!FAQ) return res.status(400).send({status:false,message:"Please Provide FQA"})
+    console.log("authentication passed")
         //----------------------- Checking the File is present or not and Creating S3 Link ----------------------//
         if (files) {
 
@@ -52,15 +53,17 @@ const createProgram = async(req,res)=>{
       data.expertImage=expertURL;
       data.teamImage=teamURL;
         }
- 
+ console.log("date imported from s3")
         data.overview = obj.overview
         data.aboutTheExpert=obj.aboutTheExpert
         data.plans = obj.plans
+        console.log("creating the program")
     let storeData = await programModal.create(data)
- 
+    console.log(" program created successfully")
     res.status(201).send({status:true,data:storeData})
    }
    catch(err){
+    console.log(err)
     return res.status(500).send({status:false,message:err.message})
 }
 }
@@ -96,6 +99,7 @@ const getallPrograms = async(req,res)=>{
         return res.status(500).send({status:false,message:err.message})
     }
 }
+
 
 const getprogrambyId = async(req,res)=>{
 
