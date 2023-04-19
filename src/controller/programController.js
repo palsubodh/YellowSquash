@@ -102,6 +102,15 @@ const getprogrambyId = async(req,res)=>{
     try{
         let programId= req.params.programId
         let data = await programModal.findOne({_id:programId})
+        let x=  data.plans.plansdetails
+            for(let i=0;i<x.length;i++){
+             let discount=  x[i].discount
+              let price = x[i].price
+              let total = price*discount/100
+              x[i].discountedPrice=price-total
+            //   console.log(x[i])
+            }
+
        if(data==null) return res.status(400).send({status:false,message:"No programs find"})
          res.status(200).send({status:true,message:"Program Found",data:data})
     }
