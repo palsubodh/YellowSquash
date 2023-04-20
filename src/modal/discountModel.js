@@ -3,8 +3,7 @@ const DiscountSchema = new mongoose.Schema({
     startDate:{type:String},
     expireDate:{type:String},
     couponCode:{type:String},
-    programName:{type:String},
-    price:{type:Number},
+    programId:{type:String},
     discount:{type:Number}
 
 },{timestamps:true})

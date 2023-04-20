@@ -50,7 +50,7 @@ router.get("/getListCategory",getListCategory)
 /****************Discount APIs**************/
 
 router.post("/creatediscount",CreateDiscount)
-router.get("/getCoupon/:couponCode",getCoupon)
+router.get("/getCoupon/:couponCode/:programId/:userId/:price",getCoupon)
 router.put("/updateCoupon",updateCoupon)
 router.delete("/deleteCoupon/:couponId",deleteCoupon)
 
