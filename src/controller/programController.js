@@ -199,7 +199,7 @@ const programWeekPrice = async (req,res)=>{
       let total = price*discount/100
       x[i].discountedPrice=price-total
       if(x[i].planDuration==week){
-        return res.status(200).send({status:true,discountedPrice:x[i].discountedPrice})
+        return res.status(200).send({status:true,discountedPrice:x[i]})
       }
     }
    }
