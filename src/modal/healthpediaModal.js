@@ -1,13 +1,18 @@
-// const mongoose = require('mongoose')
+const mongoose = require('mongoose')
 
-// const healthPediaBlog = new mongoose.Schema({
+const healthPedia = new mongoose.Schema({
+        title:{type:String},
+        releaseDate:{type:String},
+        category:{type:String},
+        summary:{type:String},
+        bannerImageUrl:{type:String},
+        bannerImageUrlKey:{type:String},
+        articleBody:{type:String},
+        expertName:{type:String},
+        expertImageUrlKey:{type:String},
+        expertImageUrl:{type:String},
+        slug:{type:String},
+        status:{type:String}
+},{timestamps:true})
 
-//     data:[
-//         blogTitle:{type:String},
-//     blogimage:{type:String},
-//     blogVideo:{type:String},
-//     ]
-    
-
-    
-// })
+module.exports = mongoose.model("healthPedia", healthPedia)

@@ -1,5 +1,6 @@
 const programModal = require('../modal/programModal')
 const uploadFile = require('../controller/aws')
+const userModel = require("../modal/userRegsiter");
 const categoryModel = require('../modal/categoryModel')
 
 const createProgram = async(req,res)=>{
@@ -40,7 +41,7 @@ const createProgram = async(req,res)=>{
     if(!howItWorks) return res.status(400).send({status:false,message:"Please Provide howItWorks"})
     if(!structure) return res.status(400).send({status:false,message:"Please Provide structure"})
     if(!FAQ) return res.status(400).send({status:false,message:"Please Provide FQA"})
-    console.log("authentication passed")
+ 
         //----------------------- Checking the File is present or not and Creating S3 Link ----------------------//
         if (files) {
 
@@ -53,17 +54,17 @@ const createProgram = async(req,res)=>{
       data.expertImage=expertURL;
       data.teamImage=teamURL;
         }
- console.log("date imported from s3")
+ 
         data.overview = obj.overview
         data.aboutTheExpert=obj.aboutTheExpert
         data.plans = obj.plans
-        console.log("creating the program")
+       
     let storeData = await programModal.create(data)
-    console.log(" program created successfully")
+
     res.status(201).send({status:true,data:storeData})
    }
    catch(err){
-    console.log(err)
+   console.log(err)
     return res.status(500).send({status:false,message:err.message})
 }
 }
@@ -181,4 +182,31 @@ const upcomingProgram = async(req,res)=>{
 
 }
 
-module.exports ={createProgram,getallPrograms,updatePrograms,deletePrograms,getprogrambyId,upcomingProgram}
+
+const programWeekPrice = async (req,res)=>{
+    
+   try{
+    let data = req.body
+    let {programId,userId,week}= data
+    let programData = await programModal.findById(programId)
+    if(!programData) return res.status(400).send({status:false,message:"ProgramId does not exits"})
+     let checkuserId = await userModel.findById(userId)
+    if(!checkuserId) return res.status(400).send({status:false,message:"checkuserId does not exits"})
+    let x=  programData.plans.plansdetails
+    for(let i=0;i<x.length;i++){
+     let discount=  x[i].discount
+      let price = x[i].price
+      let total = price*discount/100
+      x[i].discountedPrice=price-total
+      if(x[i].planDuration==week){
+        return res.status(200).send({status:true,discountedPrice:x[i].discountedPrice})
+      }
+    }
+   }
+   catch(err){
+    return res.status(500).send({status:false,message:err.message})
+}
+       
+}
+
+module.exports ={createProgram,getallPrograms,updatePrograms,deletePrograms,getprogrambyId,upcomingProgram,programWeekPrice}
