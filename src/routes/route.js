@@ -1,11 +1,12 @@
 const express = require('express')
 const router = express.Router()
 
-
-
 const {Register,login,updateUserData} = require('../controller/userController')
+
 const {phoneNumberStore, verifyOTP,forgetOTP,forgetverifyOTP} = require('../controller/cacheStrorage')
+
 const {createProgram,getallPrograms,updatePrograms,deletePrograms,getprogrambyId,upcomingProgram,programWeekPrice}= require('../controller/programController')
+
 const {createCategory,updateCategory,deleteCategory,getAllcategory,getSingleCategory,getListCategory}= require('../controller/categoryController')
 
 const {CreateDiscount,getCoupon,updateCoupon,deleteCoupon} = require('../controller/discountController')
@@ -15,6 +16,7 @@ const {wcreateCategory,wupdateCategory,wdeleteCategory,wgetAllcategory,wgetSingl
 
 const {create,getAllHealthPedia,getHealthPediaById,updateHealthpedia,deleteHealthPedia}= require('../controller/healthPediaController')
 
+const {createhealthPediaCategory,updatehealthPediaCategory,deletehealthPediaCategory,getAllHealthPediacategory,gethealthPediaSingleCategory,getListHealthPediaCategory} = require('../controller/healthPediaCategoryController')
 
 
 /*************************Auths API ******************************************/
@@ -80,6 +82,16 @@ router.get("/allhealthPedia",getAllHealthPedia)
 router.get("/gethealthPedia/:Id",getHealthPediaById)
 router.put("/updatehealthPedia",updateHealthpedia)
 router.delete("/deletehealthPedia/:healthPediaId",deleteHealthPedia)
+
+/******** HealthPeaia CATEGORY API*********************************/
+
+router.post("/createhealthPediaCategory",createhealthPediaCategory)
+router.put("/updatehealthPediaCategory",updatehealthPediaCategory)
+router.delete("/deletehealthPediaCategory/:categoryId/:category",deletehealthPediaCategory)
+router.get("/getAllHealthPediacategory",getAllHealthPediacategory)
+router.get("/gethealthPediaSingleCategory",gethealthPediaSingleCategory)
+router.get("/getListHealthPediaCategory",getListHealthPediaCategory)
+
 
 
 
