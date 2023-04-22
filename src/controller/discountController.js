@@ -53,7 +53,7 @@ const remainingDays = expire.diff(start, 'days');
                 }
                 if(count==1) return res.status(StatusCodes.BAD_REQUEST).send({status:false,message:"This coupon is already used"})
                 else {
-                    dicountedPrice = dicountedPrice-(dicountedPrice*(findcoupon.discount)/100)
+                    dicountedPrice = dicountedPrice-(dicountedPrice*(findcoupon.discount/100))
                     y.push(couponCode)
                     x[i].couponCode=y
                     x[i].price=dicountedPrice
@@ -67,7 +67,7 @@ const remainingDays = expire.diff(start, 'days');
             let obj={}
             obj.programId=programId
             obj.couponCode=[couponCode]
-            price = price-(price*(findcoupon.discount)/100)
+            price = price-(price*(findcoupon.discount/100))
             obj.price=price
             x.push(obj)
             let persistPayload = await UserCouponDetails.findOneAndUpdate({userId} ,{user:x},{new:true})
@@ -79,7 +79,7 @@ const remainingDays = expire.diff(start, 'days');
         let obj={}
         obj.programId=programId
         obj.couponCode=[couponCode]
-        price = price-(price*(findcoupon.discount)/100)
+        price = price-(price*(findcoupon.discount/100))
         obj.price=price
         arr.push(obj)
     

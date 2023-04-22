@@ -18,7 +18,10 @@ const {create,getAllHealthPedia,getHealthPediaById,updateHealthpedia,deleteHealt
 
 const {createhealthPediaCategory,updatehealthPediaCategory,deletehealthPediaCategory,getAllHealthPediacategory,gethealthPediaSingleCategory,getListHealthPediaCategory} = require('../controller/healthPediaCategoryController')
 
+const {createBatch,updateSession} = require('../controller/sessionController')
 
+
+const {orders,verify}= require("../controller/razorPay")
 /*************************Auths API ******************************************/
 
 router.post("/otp",phoneNumberStore)
@@ -93,7 +96,15 @@ router.get("/gethealthPediaSingleCategory",gethealthPediaSingleCategory)
 router.get("/getListHealthPediaCategory",getListHealthPediaCategory)
 
 
+/********  Sessions API*********************************/
 
+router.post("/sessions",createBatch)
+router.put("/updateSession",updateSession)
+
+
+/********  Razorpay API*********************************/
+router.post("/orders",orders)
+router.post("/verify",verify)
 
 module.exports = router
 
