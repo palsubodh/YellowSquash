@@ -18,7 +18,7 @@ const {create,getAllHealthPedia,getHealthPediaById,updateHealthpedia,deleteHealt
 
 const {createhealthPediaCategory,updatehealthPediaCategory,deletehealthPediaCategory,getAllHealthPediacategory,gethealthPediaSingleCategory,getListHealthPediaCategory} = require('../controller/healthPediaCategoryController')
 
-const {createBatch,updateSession} = require('../controller/sessionController')
+const {createBatch,updateSession,getsession,deleteBatchfromBatchId,deleteSessionfromSessionId} = require('../controller/sessionController')
 
 
 const {orders,verify}= require("../controller/razorPay")
@@ -100,6 +100,9 @@ router.get("/getListHealthPediaCategory",getListHealthPediaCategory)
 
 router.post("/sessions",createBatch)
 router.put("/updateSession",updateSession)
+router.get("/getsession/:id/:batchId",getsession)
+router.delete("/deleteSession/:id/:batchId",deleteBatchfromBatchId)
+router.delete("/deleteSession/:id/:batchId/:sessionId",deleteSessionfromSessionId)
 
 
 /********  Razorpay API*********************************/
