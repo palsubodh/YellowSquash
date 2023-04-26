@@ -3,11 +3,9 @@ const crypto = require("crypto")
 const StatusCodes = require('http-status-codes')
 require('dotenv').config({path:'./.env'})
 const PaymentModal = require('../modal/paymentModal');
-const paymentModal = require('../modal/paymentModal');
 
 
-//  let key_id: process.env.RAZORKEYID,
-//   let key_secret: process.env.RAZORPAYSECERTID,
+
 
 const orders = async(req,res)=>{
     try{
@@ -47,8 +45,13 @@ const verify = async(req,res)=>{
         .digest("hex")
 
         if(razorpay_signature === expectedSign){
-            await paymentModal.create(req.body)
-            return res.status(StatusCodes.OK).send({status:true,message:"Payment verified successfully"})
+            // await paymentModal.create(req.body)
+            const instance = new Razorpay({
+                key_id: process.env.RAZORKEYID,
+                key_secret: process.env.RAZORPAYSECERTID,
+               });
+            const payment = await instance.payments.fetch(razorpay_payment_id);
+            return res.status(StatusCodes.OK).send({status:true,message:"Payment verified successfully",data:payment})
         }
         else
         {
@@ -61,4 +64,20 @@ const verify = async(req,res)=>{
     }
 }
 
-module.exports ={orders,verify}
+const PaymentStore = async(req,res)=>{
+   try{
+    let data = req.body
+    if(!data) return res.status(StatusCodes.BAD_REQUEST).send({status:false,message:"Please Provide details"})
+    let store = await PaymentModal.create(data)
+    res.status(StatusCodes.OK).send({status:true})
+   }
+   catch(err){
+    console.log(err)
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({status:false,message:err.message})
+}
+
+}
+
+  
+
+module.exports ={orders,verify,PaymentStore}

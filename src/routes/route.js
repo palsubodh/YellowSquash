@@ -21,7 +21,7 @@ const {createhealthPediaCategory,updatehealthPediaCategory,deletehealthPediaCate
 const {createBatch,updateSession,getsession,deleteBatchfromBatchId,deleteSessionfromSessionId} = require('../controller/sessionController')
 
 
-const {orders,verify}= require("../controller/razorPay")
+const {orders,verify,PaymentStore}= require("../controller/razorPay")
 /*************************Auths API ******************************************/
 
 router.post("/otp",phoneNumberStore)
@@ -108,6 +108,8 @@ router.delete("/deleteSession/:id/:batchId/:sessionId",deleteSessionfromSessionI
 /********  Razorpay API*********************************/
 router.post("/orders",orders)
 router.post("/verify",verify)
+router.post("/PaymentStore",PaymentStore)
+
 
 module.exports = router
 
