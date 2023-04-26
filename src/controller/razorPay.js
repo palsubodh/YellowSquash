@@ -2,6 +2,8 @@ const Razorpay = require('razorpay');
 const crypto = require("crypto")
 const StatusCodes = require('http-status-codes')
 require('dotenv').config({path:'./.env'})
+const PaymentModal = require('../modal/paymentModal');
+const paymentModal = require('../modal/paymentModal');
 
 
 //  let key_id: process.env.RAZORKEYID,
@@ -27,7 +29,7 @@ const orders = async(req,res)=>{
         })
     }
     catch(err){
-        console.log(error)
+        
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({status:false,message:err.message})
     }
 }
@@ -45,6 +47,7 @@ const verify = async(req,res)=>{
         .digest("hex")
 
         if(razorpay_signature === expectedSign){
+            await paymentModal.create(req.body)
             return res.status(StatusCodes.OK).send({status:true,message:"Payment verified successfully"})
         }
         else
@@ -53,7 +56,7 @@ const verify = async(req,res)=>{
         }
     }
     catch(err){
-        console.log(error)
+        console.log(err)
         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({status:false,message:err.message})
     }
 }
